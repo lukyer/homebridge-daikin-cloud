@@ -62,16 +62,18 @@ export class DaikinCloudAirConditioningAccessory {
             .onGet(this.handleHeatingThresholdTemperatureGet.bind(this))
             .onSet(this.handleHeatingThresholdTemperatureSet.bind(this));
 
-        this.service.getCharacteristic(this.platform.Characteristic.RotationSpeed)
-            .setProps({
-                minStep: this.accessory.context.device.getData('climateControl', 'fanControl', '/operationModes/cooling/fanSpeed/modes/fixed').minStep,
-                minValue: this.accessory.context.device.getData('climateControl', 'fanControl', '/operationModes/cooling/fanSpeed/modes/fixed').minValue,
-                maxValue: this.accessory.context.device.getData('climateControl', 'fanControl', '/operationModes/cooling/fanSpeed/modes/fixed').maxValue,
-            })
-            .onGet(this.handleRotationSpeedGet.bind(this))
-            .onSet(this.handleRotationSpeedSet.bind(this));
+        if (this.platform.config.showExtraFeatures) {
+            this.service.getCharacteristic(this.platform.Characteristic.RotationSpeed)
+                .setProps({
+                    minStep: this.accessory.context.device.getData('climateControl', 'fanControl', '/operationModes/cooling/fanSpeed/modes/fixed').minStep,
+                    minValue: this.accessory.context.device.getData('climateControl', 'fanControl', '/operationModes/cooling/fanSpeed/modes/fixed').minValue,
+                    maxValue: this.accessory.context.device.getData('climateControl', 'fanControl', '/operationModes/cooling/fanSpeed/modes/fixed').maxValue,
+                })
+                .onGet(this.handleRotationSpeedGet.bind(this))
+                .onSet(this.handleRotationSpeedSet.bind(this));
+        }
 
-        if (this.hasSwingModeFeature()) {
+        if (this.hasSwingModeFeature() && this.platform.config.showExtraFeatures) {
             this.platform.log.debug(`[${this.name}] Device has SwingMode, add Characteristic`);
             this.service.getCharacteristic(this.platform.Characteristic.SwingMode)
                 .onGet(this.handleSwingModeGet.bind(this))
