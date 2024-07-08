@@ -3,7 +3,7 @@ import {API, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig, S
 import {PLATFORM_NAME, PLUGIN_NAME} from './settings';
 import {DaikinClimateControlEmbeddedId, daikinAirConditioningAccessory} from './daikinAirConditioningAccessory';
 
-import {DaikinCloudController} from 'daikin-controller-cloud/dist/index.js';
+import {DaikinCloudController} from 'daikin-controller-cloud';
 
 import {daikinAlthermaAccessory} from './daikinAlthermaAccessory';
 import {resolve} from 'node:path';
@@ -182,7 +182,7 @@ export class DaikinCloudPlatform implements DynamicPlatformPlugin {
             ...config,
             clientId: StringUtils.mask(config.clientId),
             clientSecret: StringUtils.mask(config.clientSecret),
-            excludedDevicesByDeviceId: config.excludedDevicesByDeviceId.map(deviceId => StringUtils.mask(deviceId)),
+            excludedDevicesByDeviceId: config.excludedDevicesByDeviceId ? config.excludedDevicesByDeviceId.map(deviceId => StringUtils.mask(deviceId)) : [],
         };
     }
 }
