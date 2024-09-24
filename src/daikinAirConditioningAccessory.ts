@@ -74,9 +74,11 @@ export class daikinAirConditioningAccessory extends daikinAccessory {
                 .onSet(this.handleHeatingThresholdTemperatureSet.bind(this));
         }
 
-        this.addOrUpdateCharacteristicRotationSpeed(operationMode);
+        if (this.platform.config.showExtraFeatures) {
+            this.addOrUpdateCharacteristicRotationSpeed(operationMode);
+        }
 
-        if (this.hasSwingModeFeature()) {
+        if (this.hasSwingModeFeature() && this.platform.config.showExtraFeatures) {
             this.platform.log.debug(`[${this.name}] Device has SwingMode, add Characteristic`);
             this.service.getCharacteristic(this.platform.Characteristic.SwingMode)
                 .onGet(this.handleSwingModeGet.bind(this))
